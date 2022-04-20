@@ -237,8 +237,10 @@ class Game extends React.Component {
     render (){
         return (
             <div>
-                <div className='w3-display-container w3-light-blue w3-display-middle' style={{width:"300px", height:"500px"}}>
-                    <canvas  className="table" id ="myCanvas" width="300" height="500"></canvas>
+                <div className='w3-container w3-display-right' style={{width:"50%", height:"100%"}}>
+                    <div className='w3-display-container w3-light-blue w3-display-left w3-margin' style={{width:"300px", height:"500px"}}>
+                        <canvas  className="table" id ="myCanvas" width="300" height="500"></canvas>
+                    </div>
                 </div>
                 <ScoreCard score={this.state.score}/>
             </div>
