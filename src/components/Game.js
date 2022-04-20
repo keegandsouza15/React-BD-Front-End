@@ -16,17 +16,31 @@ class Game extends React.Component {
         this.game()
     }
 
-    updateScore() {
-        this.setState({score: 90})
+    updateScore1(new_score) {
+        //console.log('From update score: ' + new_score)
+      
+        this.setState({score: new_score})
+       
 
     }
 
-    game () {
+    getScore1() {
+        return this.state.score
+    }
 
-        this.updateScore()
+    game () {
+        let test = (value) => {
+            this.updateScore1(value)
+        }
+
+        let getScore = () => {
+            //console.log('from getsocre', this.getScore1())
+            let val = this.getScore1()
+            return val
+        }
 
         var username = 'Test User'
-
+        
         // The canvas
         
         //let canvas = <canvas class="table" id ="myCanvas" width="300" height="500"></canvas>
@@ -149,7 +163,8 @@ class Game extends React.Component {
         function draw() {
             // Updates the score in the html.
             //document.getElementById("scoreWindow").innerHTML =  "Score: "  + window.score;
-            //console.log(score)
+           // this.updateScore(100)
+
             // Check if the game is not over and draws all the elements.
             if (gameOver== false){
                 ctx.clearRect(0,0,canvas.width, canvas.height);
@@ -170,7 +185,11 @@ class Game extends React.Component {
                 // Increments the borderMovement position.
                 borderDY += 5;        
                 // Add to the score.
-                score +=1;
+                //score +=1;
+                let value = getScore() + 1
+
+                test(value);
+
                 // Increases the difficulty by making the obstacles appear quicker
                 if (score % 500 == 0){
                     intervalTime = intervalTime / 1.1;
