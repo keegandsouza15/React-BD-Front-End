@@ -19,7 +19,12 @@ class HighScoreTable extends React.Component {
     constructor(props) {
         super(props)
         this.api = "http://localhost:5000/HighScores/GetTopTen"
-        this.state = {scores: [['dummy', 0], ['test', 1], ['bob', 2]]}
+        this.state = {scores: []}
+    }
+
+    componentDidMount() {
+        this.getScores();
+        setInterval(this.getScores, 5000)
     }
 
     getScores = async () => {
@@ -46,7 +51,7 @@ class HighScoreTable extends React.Component {
                     
                 </table>
             </div>
-            <button onClick={this.getScores}>Get Scores</button>
+            
             </div>        
         )
     }
