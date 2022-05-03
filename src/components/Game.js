@@ -1,56 +1,35 @@
-import React, { useEffect } from 'react';
 
+import React from "react";
 import ScoreCard from "./ScoreCard"
 
 
 class Game extends React.Component {
-
-
     constructor(props) {
         super(props);
-        this.state = {score: 0}
       }
 
     componentDidMount(){
         console.log('From component did mount - Game')
-        if (this.props.gameRunning) {
-            this.game()
-        }
-        //this.game()
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
         if (prevProps.gameRunning !== this.props.gameRunning) {
                this.game()
         }
     }
 
+    // updateScore(new_score) {
+    //     this.setState({score: new_score})
+    // }
 
-
-    
-
-    updateScore1(new_score) {
-        //console.log('From update score: ' + new_score)
-      
-        this.setState({score: new_score})
-       
-
-    }
-
-    getScore1() {
-        return this.state.score
+    getScore() {
+        return this.props.score
     }
 
     game () {
-        let test = (value) => {
-            this.updateScore1(value)
-        }
 
-        let getScore = () => {
-            //console.log('from getsocre', this.getScore1())
-            let val = this.getScore1()
-            return val
-        }
+        const updateScore = this.props.updateScore.bind(this)
+        const getScore = this.getScore.bind(this)
 
         var username = 'Test User'
         
@@ -178,6 +157,7 @@ class Game extends React.Component {
             //document.getElementById("scoreWindow").innerHTML =  "Score: "  + window.score;
            // this.updateScore(100)
 
+
             // Check if the game is not over and draws all the elements.
             if (gameOver== false){
                 ctx.clearRect(0,0,canvas.width, canvas.height);
@@ -201,7 +181,7 @@ class Game extends React.Component {
                 //score +=1;
                 let value = getScore() + 1
 
-                test(value);
+                updateScore(value)
 
                 // Increases the difficulty by making the obstacles appear quicker
                 if (score % 500 == 0){
@@ -235,6 +215,7 @@ class Game extends React.Component {
             // Commented out for testing
             //myInterval = setInterval (createObstacle, intervalTime);
         }
+        
         // Creates the intial obstacles.
         createObstacles ();
         // Creates more obstacles every 5 seconds.
@@ -256,7 +237,7 @@ class Game extends React.Component {
                     </div>
                 </div>
                 <ScoreCard 
-                    score={this.state.score} 
+                    score={this.props.score}
                     username={this.props.username} 
                     handleUsernameSubmit={this.props.handleUsernameSubmit}
                 />

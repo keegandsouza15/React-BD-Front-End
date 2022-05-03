@@ -11,6 +11,7 @@ class App extends React.Component {
     this.state = {username: "", score: 0, gameRunning: false };
     
     this.handleUsernameSubmit = this.handleUsernameSubmit.bind(this)
+    this.updateScore = this.updateScore.bind(this)
   
   }
 
@@ -20,15 +21,22 @@ class App extends React.Component {
       event.preventDefault();
   }
 
+  updateScore(newScore) {
+    this.setState({score: newScore})
+  }
+
 
   render() {
     return (
       <div className="w3-container">
         <Header/>
         <HighScoresTable/>
-        <Game username={this.state.username} 
+        <Game username={this.state.username}
+              score={this.state.score}
+              gameRunning={this.state.gameRunning}
               handleUsernameSubmit={this.handleUsernameSubmit}
-              gameRunning={this.state.gameRunning}/>
+              updateScore={this.updateScore}/>
+              
       </div>
     )
   }
