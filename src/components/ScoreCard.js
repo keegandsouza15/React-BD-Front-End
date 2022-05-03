@@ -4,12 +4,9 @@ import React from "react"
 class ScoreCard extends React.Component{
     constructor(props) {
         super (props)
-        this.state = {score: props.score}
-        this.state = {username: ""}
-        this.state = {userentered: false}
+        this.state = {choosingUsername: ""}
 
-        this.handleChange = this.handleUsernameChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleUsernameChange = this.handleUsernameChange.bind(this)
     }
 
     componentDidMount() {
@@ -17,18 +14,12 @@ class ScoreCard extends React.Component{
             () => this.getHighScorePosition(this.props.score),
             1000
         );
+        
     }
 
     handleUsernameChange(event) {
         console.log('here', event.target.value)
-        this.setState({username: event.target.value})
-    }
-
-    handleSubmit(event) {
-        console.log(this.state.username)
-        this.setState({userentered: true})
-
-        event.preventDefault();
+        this.setState({choosingUsername: event.target.value})
     }
 
     async getHighScorePosition (score) {
@@ -47,15 +38,18 @@ class ScoreCard extends React.Component{
     }
 
     render () {
+
+        const username = this.props.username
+
         return (
                 <div className='w3-display-bottommiddle w3-container w3-lime w3-padding'style={{height:"150px", width:"400px"}} >
 
-                    {this.state.userentered
-                        ? <h4>UserName: {this.state.username}</h4>
-                        : <form onSubmit={this.handleSubmit}>
+                    {username !== ""
+                        ? <h4>UserName: {username} </h4>
+                        : <form onSubmit={this.props.handleUsernameSubmit}>
                             <label>
                             UserName:
-                            <input type="text" value={this.state.username} onChange={this.handleChange}/>
+                            <input type="text" value = {this.state.choosingUsername} onChange={this.handleUsernameChange}/>
                             </label>
                             <input type="submit" value="Submit"/>
                            </form>         

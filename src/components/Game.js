@@ -12,8 +12,8 @@ class Game extends React.Component {
       }
 
     componentDidMount(){
-        console.log('From component did mount')
-        this.game()
+        console.log('From component did mount - Game')
+        //this.game()
     }
 
     updateScore1(new_score) {
@@ -242,7 +242,11 @@ class Game extends React.Component {
                         <canvas  className="table" id ="myCanvas" width="300" height="500"></canvas>
                     </div>
                 </div>
-                <ScoreCard score={this.state.score}/>
+                <ScoreCard 
+                    score={this.state.score} 
+                    username={this.props.username} 
+                    handleUsernameSubmit={this.props.handleUsernameSubmit}
+                />
             </div>
         )
     
