@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import ScoreCard from "./ScoreCard"
 
@@ -13,8 +13,21 @@ class Game extends React.Component {
 
     componentDidMount(){
         console.log('From component did mount - Game')
+        if (this.props.gameRunning) {
+            this.game()
+        }
         //this.game()
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.gameRunning !== this.props.gameRunning) {
+               this.game()
+        }
+    }
+
+
+
+    
 
     updateScore1(new_score) {
         //console.log('From update score: ' + new_score)

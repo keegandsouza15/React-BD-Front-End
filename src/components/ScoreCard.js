@@ -18,7 +18,6 @@ class ScoreCard extends React.Component{
     }
 
     handleUsernameChange(event) {
-        console.log('here', event.target.value)
         this.setState({choosingUsername: event.target.value})
     }
 
@@ -39,7 +38,7 @@ class ScoreCard extends React.Component{
 
     render () {
 
-        const username = this.props.username
+        const username = this.props.username;
 
         return (
                 <div className='w3-display-bottommiddle w3-container w3-lime w3-padding'style={{height:"150px", width:"400px"}} >

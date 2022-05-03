@@ -8,13 +8,15 @@ class App extends React.Component {
   constructor(props) {
     super (props)
 
-    this.state = {username: "", score: 0, gameOver: false };
+    this.state = {username: "", score: 0, gameRunning: false };
+    
     this.handleUsernameSubmit = this.handleUsernameSubmit.bind(this)
   
   }
 
   handleUsernameSubmit(event) {
       this.setState({username: event.target[0].value})
+      this.setState({gameRunning: true})
       event.preventDefault();
   }
 
@@ -25,7 +27,8 @@ class App extends React.Component {
         <Header/>
         <HighScoresTable/>
         <Game username={this.state.username} 
-              handleUsernameSubmit={this.handleUsernameSubmit} />
+              handleUsernameSubmit={this.handleUsernameSubmit}
+              gameRunning={this.state.gameRunning}/>
       </div>
     )
   }
