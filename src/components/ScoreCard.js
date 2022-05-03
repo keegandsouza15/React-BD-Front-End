@@ -5,6 +5,11 @@ class ScoreCard extends React.Component{
     constructor(props) {
         super (props)
         this.state = {score: props.score}
+        this.state = {username: ""}
+        this.state = {userentered: false}
+
+        this.handleChange = this.handleUsernameChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     componentDidMount() {
@@ -12,6 +17,18 @@ class ScoreCard extends React.Component{
             () => this.getHighScorePosition(this.props.score),
             1000
         );
+    }
+
+    handleUsernameChange(event) {
+        console.log('here', event.target.value)
+        this.setState({username: event.target.value})
+    }
+
+    handleSubmit(event) {
+        console.log(this.state.username)
+        this.setState({userentered: true})
+
+        event.preventDefault();
     }
 
     async getHighScorePosition (score) {
@@ -24,7 +41,6 @@ class ScoreCard extends React.Component{
             body: JSON.stringify({'score' : score})
         })
         const data = await response.text()
-        console.log(data)
 
         this.setState({score: data})
 
@@ -32,8 +48,19 @@ class ScoreCard extends React.Component{
 
     render () {
         return (
-                <div className='w3-display-bottommiddle w3-container w3-lime w3-padding'style={{height:"150px", width:"400px"}} >            
-                    <h4>UserName: Keegan</h4>
+                <div className='w3-display-bottommiddle w3-container w3-lime w3-padding'style={{height:"150px", width:"400px"}} >
+
+                    {this.state.userentered
+                        ? <h4>UserName: {this.state.username}</h4>
+                        : <form onSubmit={this.handleSubmit}>
+                            <label>
+                            UserName:
+                            <input type="text" value={this.state.username} onChange={this.handleChange}/>
+                            </label>
+                            <input type="submit" value="Submit"/>
+                           </form>         
+                    }
+                      
                     <h4>Score: {this.props.score}</h4>
                     <h4>currentPosition: {this.state.score}</h4>
                 </div>

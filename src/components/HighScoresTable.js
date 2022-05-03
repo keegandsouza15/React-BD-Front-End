@@ -2,7 +2,6 @@ import React from "react"
 
 function ScoreList(props){
     const scores = props.scores;
-    console.log(scores)
     const listItems = scores.map((item) => 
         <tr key={item[0]}>
             <td>{item[0]}</td>
