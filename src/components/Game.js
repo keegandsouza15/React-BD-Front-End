@@ -95,19 +95,19 @@ class Game extends React.Component {
             obstacleList[pos] = [x,y];
             //Checks if the user has hit the obstacle.
             if (y >= rectangleY && ((x >= rectangleX && x + obstacleLength <= rectangleX + 30))){
-                    gameOver = true;
-            if (username != null){
-                alert("will push to high score database")
-                //loadXMLDoc_PUSHTOHIGHSCOREDATABASE(username, score);
-            }
-                    //document.location.reload();
-                    //window.location.replace("game-over.html?username=" + username + "&score="+score);
+                    window.location.reload()
+                if (username != null){
+                    alert("will push to high score database")
+                    //loadXMLDoc_PUSHTOHIGHSCOREDATABASE(username, score);
+                }
+                        //document.location.reload();
+                        //window.location.replace("game-over.html?username=" + username + "&score="+score);
 
-                    return;
+                        return;
             }
             // If the obstacle has moven of screen delete it from the list.    
             if (y > canvas.height + obstacleHeight){
-            obstacleList.splice(pos, 1);
+                obstacleList.splice(pos, 1);
             }
         }
 
@@ -153,42 +153,36 @@ class Game extends React.Component {
 
         // Draws all the elements.
         function draw() {
-            // Updates the score in the html.
-            //document.getElementById("scoreWindow").innerHTML =  "Score: "  + window.score;
-           // this.updateScore(100)
-
+            // Updates the score
+            let value = getScore() + 1
+            updateScore(value)
 
             // Check if the game is not over and draws all the elements.
-            if (gameOver== false){
-                ctx.clearRect(0,0,canvas.width, canvas.height);
-                drawRectangle();
-                createBorders();
-                // Moves the Obstacles in the obstacle list.
-                for (var i = 0; i < obstacleList.length; i++){
-                    moveObstacle (i);
-                }
-                
-                // Moves the rectangle left or right depending on which button is pressed.
-                if(rightPressed && rectangleX < (canvas.width - borderRectX) - 30) {
-                    rectangleX += 7;
-                }
-                else if(leftPressed && rectangleX > borderRectX) {
-                    rectangleX -= 7;
-                }
-                // Increments the borderMovement position.
-                borderDY += 5;        
-                // Add to the score.
-                //score +=1;
-                let value = getScore() + 1
-
-                updateScore(value)
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            drawRectangle();
+            createBorders();
+            // Moves the Obstacles in the obstacle list.
+            for (var i = 0; i < obstacleList.length; i++){
+                moveObstacle (i);
+            }
+            
+            // Moves the rectangle left or right depending on which button is pressed.
+            if(rightPressed && rectangleX < (canvas.width - borderRectX) - 30) {
+                rectangleX += 7;
+            }
+            else if(leftPressed && rectangleX > borderRectX) {
+                rectangleX -= 7;
+            }
+            // Increments the borderMovement position.
+            borderDY += 5;        
+               
 
                 // Increases the difficulty by making the obstacles appear quicker
-                if (score % 500 == 0){
-                    intervalTime = intervalTime / 1.1;
-                    clearInterval (myInterval);
-                }
-            }
+                // if (score % 500 == 0){
+                //     intervalTime = intervalTime / 1.1;
+                //     clearInterval (myInterval);
+                // }
+            //}
         }
         // Handles Key Down Events
         function keyDownHandler(e) {
@@ -212,8 +206,7 @@ class Game extends React.Component {
 
         // Creates the obstacles. 
         function createObstacles (){
-            // Commented out for testing
-            //myInterval = setInterval (createObstacle, intervalTime);
+            myInterval = setInterval (createObstacle, intervalTime);
         }
         
         // Creates the intial obstacles.
