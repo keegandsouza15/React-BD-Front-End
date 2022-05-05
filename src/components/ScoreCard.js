@@ -50,7 +50,7 @@ class ScoreCard extends React.Component{
                             UserName:
                             <input type="text" value = {this.state.choosingUsername} onChange={this.handleUsernameChange}/>
                             </label>
-                            <input type="submit" value="Submit"/>
+                            <input type="submit" value="Start"/>
                            </form>         
                     }
                       

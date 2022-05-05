@@ -13,10 +13,6 @@ class Game extends React.Component {
 
         this.borderDY = 0
 
-        // // The canvas
-        // let canvas = document.getElementById("myCanvas");
-        // let ctx = canvas.getContext("2d");
-
         //Rectangle Variables
         this.rectangleX = null ;
         this.rectangleY = null ;
@@ -40,6 +36,12 @@ class Game extends React.Component {
         this.keyDownHandler = this.keyDownHandler.bind(this)
         this.keyUpHandler = this.keyUpHandler.bind(this)
         this.createObstacle = this.createObstacle.bind(this)
+        this.game = this.game.bind(this)
+        this.obstacles = this.obstacles.bind(this)
+
+        this.drawInterval = null
+        this.obstacleInterval = null
+        this.obstacleIntervals = []
 
 
 
@@ -61,12 +63,15 @@ class Game extends React.Component {
         this.rectangleY = this.canvas.height-30;
 
         this.createBorders();
-        //this.createObstacle();
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.gameRunning !== this.props.gameRunning) {
-               this.game()
+        console.log("from compenentDidUpdate")
+        // if (prevProps.gameRunning !== this.props.gameRunning) {
+        //        this.game()
+        // }
+        if (this.props.gameRunning == true && prevProps.gameRunning !== this.props.gameRunning ){
+            this.game()
         }
 
 
@@ -162,7 +167,6 @@ class Game extends React.Component {
     createObstacle() {
         const ctx = this.ctx
 
-        console.log(this.canvas.width)
 
         var obstacleLength = 7;
         var obstacleHeight = 7;
@@ -198,15 +202,17 @@ class Game extends React.Component {
         this.obstacleList[pos] = [x,y];
         //Checks if the user has hit the obstacle.
         if (y >= this.rectangleY && ((x >= this.rectangleX && x + obstacleLength <= this.rectangleX + 30))){
-                window.location.reload()
-            if (this.props.username != null){
-                alert("will push to high score database")
-                //loadXMLDoc_PUSHTOHIGHSCOREDATABASE(username, score);
-            }
-                    //document.location.reload();
-                    //window.location.replace("game-over.html?username=" + username + "&score="+score);
+                this.props.handleGameOver()
+                this.clearGame()
+                //window.location.reload()
+            // if (this.props.username != null){
+            //     alert("will push to high score database")
+            //     //loadXMLDoc_PUSHTOHIGHSCOREDATABASE(username, score);
+            // }
+            //         //document.location.reload();
+            //         //window.location.replace("game-over.html?username=" + username + "&score="+score);
 
-                    return;
+            //         return;
         }
         // // If the obstacle has moven of screen delete it from the list.    
         if (y > this.canvas.height + obstacleHeight){
@@ -214,10 +220,33 @@ class Game extends React.Component {
         }
     }
 
+    // Starts the game
     game () {
-        setInterval (this.draw, 20);
-        setInterval ( () => setInterval(this.createObstacle, 1000 + Math.floor(Math.random() * 2000)), 3500)
+        this.drawInterval = setInterval (this.draw, 20);
+        this.obstacleInterval = setInterval (this.obstacles, 3500)
+
+
         this.createObstacle();
+    }
+
+    obstacles() {
+        console.log(this.obstacleIntervals)
+        console.log('here')
+        let id = setInterval(this.createObstacle, 1000 + Math.floor(Math.random() * 2000))
+        this.obstacleIntervals.push(id)
+    }
+
+    clearGame() {
+        clearInterval(this.drawInterval)
+        clearInterval(this.obstacleInterval)
+
+        for (let id in this.obstacleIntervals){
+            console.log(this.obstacleIntervals[id])
+            clearInterval(this.obstacleIntervals[id])
+        }
+        this.obstacleIntervals = []
+
+        this.obstacleList = []
     }
 
    keyDownHandler(e) {
