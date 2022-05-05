@@ -106,14 +106,6 @@ class Game extends React.Component {
         }
         // Increments the borderMovement position.
         this.borderDY += 5;        
-        
-
-            // Increases the difficulty by making the obstacles appear quicker
-            // if (score % 500 == 0){
-            //     intervalTime = intervalTime / 1.1;
-            //     clearInterval (myInterval);
-            // }
-        //}
     }
 
     // Creates moving Borders.
@@ -221,9 +213,6 @@ class Game extends React.Component {
             this.obstacleList.splice(pos, 1);
         }
     }
-
-   
-      
 
     game () {
         setInterval (this.draw, 20);
