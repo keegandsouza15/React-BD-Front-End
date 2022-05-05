@@ -25,7 +25,6 @@ class App extends React.Component {
     this.setState({score: newScore})
   }
 
-
   render() {
     return (
       <div className="w3-container">

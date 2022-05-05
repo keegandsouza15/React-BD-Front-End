@@ -3,227 +3,255 @@ import React from "react";
 import ScoreCard from "./ScoreCard"
 
 
+
 class Game extends React.Component {
     constructor(props) {
         super(props);
+
+        this.ctx = null;
+        this.canvas = null;
+
+        this.borderDY = 0
+
+        // // The canvas
+        // let canvas = document.getElementById("myCanvas");
+        // let ctx = canvas.getContext("2d");
+
+        //Rectangle Variables
+        this.rectangleX = null ;
+        this.rectangleY = null ;
+        this.rightPressed = false;
+        this.leftPressed = false;
+        this.borderRectX = 5;
+
+        // // Obstacle Variables
+        // var obstacleLength = 7;
+        // var obstacleHeight = 7;
+        this.obstacleList = [];
+
+        // // Game Variables
+        // //var gameOver = false;
+        // //var score = 0;
+        // var intervalTime = 1000;
+        // var myInterval = null;
+
+        this.draw = this.draw.bind(this)
+        this.createBorders = this.createBorders.bind(this)
+        this.keyDownHandler = this.keyDownHandler.bind(this)
+        this.keyUpHandler = this.keyUpHandler.bind(this)
+        this.createObstacle = this.createObstacle.bind(this)
+
+
+
       }
 
     componentDidMount(){
         console.log('From component did mount - Game')
+
+        document.addEventListener("keydown", this.keyDownHandler, false);
+        document.addEventListener("keyup", this.keyUpHandler, false);
+
+
+
+        this.canvas = document.getElementById("myCanvas");
+        this.ctx = this.canvas.getContext("2d")
+        this.borderRightPosX = this.canvas.width - this.borderRectX;
+
+        this.rectangleX = this.canvas.width/2 - 15;
+        this.rectangleY = this.canvas.height-30;
+
+        this.createBorders();
+        //this.createObstacle();
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.gameRunning !== this.props.gameRunning) {
                this.game()
         }
+
+
     }
 
-    // updateScore(new_score) {
-    //     this.setState({score: new_score})
-    // }
 
     getScore() {
-        return this.props.score
+        return this.props.score;
     }
 
-    game () {
+    getGameRunning() {
+        return this.props.gameRunning;
+    }
 
-        const updateScore = this.props.updateScore.bind(this)
-        const getScore = this.getScore.bind(this)
-
-        var username = 'Test User'
+    // Draws all the elements.
+    draw() {
         
-        // The canvas
+        // Updates the score
+        let value = this.props.score + 1
+        this.props.updateScore(value)
+
+        // Check if the game is not over and draws all the elements.
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.drawRectangle();
+        this.createBorders();
+        // Moves the Obstacles in the obstacle list.
+        for (var i = 0; i < this.obstacleList.length; i++){
+            this.moveObstacle (i);
+        }
+      
+        // Moves the rectangle left or right depending on which button is pressed.
+        if(this.rightPressed && this.rectangleX < (this.canvas.width - this.borderRectX) - 30) {
+            this.rectangleX += 7;            
+        }
+        else if(this.leftPressed && this.rectangleX > this.borderRectX) {
+            this.rectangleX -= 7;
+        }
+        // Increments the borderMovement position.
+        this.borderDY += 5;        
         
-        //let canvas = <canvas class="table" id ="myCanvas" width="300" height="500"></canvas>
-        let canvas = document.getElementById("myCanvas");
-        let ctx = canvas.getContext("2d");
 
-        // Rectangle Variables
-        var rectangleX = canvas.width/2 - 15;
-        var rectangleY = canvas.height-30;
-        var rightPressed = false;
-        var leftPressed = false;
+            // Increases the difficulty by making the obstacles appear quicker
+            // if (score % 500 == 0){
+            //     intervalTime = intervalTime / 1.1;
+            //     clearInterval (myInterval);
+            // }
+        //}
+    }
 
-        // Border Variables
-        var borderRectX = 5;
-        var borderRectY = 20;
-        var borderDY = 2;
-        var borderLeftPosY = 0;
-        var borderRightPosY = 0;
-        var borderLeftPosX = 0;
-        var borderRightPosX = canvas.width-borderRectX;
-        var borderDY = 0
+    // Creates moving Borders.
+    createBorders () {
+            // Border Variables
+            var borderRectX = 5;
+            var borderRectY = 20;
+            var borderLeftPosY = 0;
+            var borderRightPosY = 0;
+            var borderLeftPosX = 0;
+            var borderRightPosX = this.canvas.width-borderRectX;
+            const ctx = this.ctx
 
-        // Obstacle Variables
-        var obstacleLength = 7;
-        var obstacleHeight = 7;
-        var obstacleList = [];
-
-        // Game Variables
-        var gameOver = false;
-        var score = 0;
-        var intervalTime = 1000;
-        var myInterval = null;
-
-        // Create an obstacles.
-        function createObstacle() {
-            var obstacleY = 0;
-            var obstacleX = Math.floor((Math.random() * (canvas.width - (obstacleLength + borderRectX)) + 1));
-            obstacleX +=borderRectX;
-            ctx.beginPath();
-            ctx.rect(obstacleX, obstacleY, obstacleLength, obstacleHeight);
-            ctx.fillStyle = "#8b0000";
-            ctx.fill();
-            ctx.closePath();
-            // Addes the obstacle's cordinates to a list.
-            obstacleList.push([obstacleX, obstacleY]);
-        }
-
-        // Moves a specific Obstacle
-        function moveObstacle (pos) {
-            // Gets the obstacles cordinates from the list.
-            var x = obstacleList [pos][0];
-            var y = obstacleList [pos][1];
-            y+=7;
-            ctx.beginPath();
-            ctx.rect(x, y, obstacleLength, obstacleHeight);
-            ctx.fillStyle = "#8b0000";
-            ctx.fill();
-            ctx.closePath(); 
-            // Updates the obstacles position.
-            obstacleList[pos] = [x,y];
-            //Checks if the user has hit the obstacle.
-            if (y >= rectangleY && ((x >= rectangleX && x + obstacleLength <= rectangleX + 30))){
-                    window.location.reload()
-                if (username != null){
-                    alert("will push to high score database")
-                    //loadXMLDoc_PUSHTOHIGHSCOREDATABASE(username, score);
-                }
-                        //document.location.reload();
-                        //window.location.replace("game-over.html?username=" + username + "&score="+score);
-
-                        return;
-            }
-            // If the obstacle has moven of screen delete it from the list.    
-            if (y > canvas.height + obstacleHeight){
-                obstacleList.splice(pos, 1);
-            }
-        }
-
-        // Creates moving Borders.
-        function createBorders () {
             // Left Borders
             for (var i = 0; i < 25; i++){
                     ctx.beginPath();
-                    ctx.rect(borderLeftPosX, borderLeftPosY + borderDY, borderRectX, borderRectY);
+                    ctx.rect(borderLeftPosX, borderLeftPosY + this.borderDY, borderRectX, borderRectY);
                     ctx.fillStyle = "#0024DD";
                     ctx.fill();
                     ctx.closePath();
                     borderLeftPosY += 24
             }
-            // Right Borders
+
+            // // Right Borders
             for (var i = 0; i < 25; i++){
                     ctx.beginPath();
-                    ctx.rect(borderRightPosX, borderRightPosY + borderDY, borderRectX, borderRectY);
+                    ctx.rect(borderRightPosX, borderRightPosY + this.borderDY, borderRectX, borderRectY);
                     ctx.fillStyle = "#0024DD";
                     ctx.fill();
                     ctx.closePath();
                     borderRightPosY += 24
             }
             
-            // Sets the Borders y cordinate to 0. 
-            borderLeftPosY = 0;
-            borderRightPosY = 0;
-            if (borderDY >= 20){
-                    borderDY = 0;
+            // // Sets the Borders y cordinate to 0. 
+            if (this.borderDY >= 20){
+                this.borderDY = 0;
             }
-        
-        }
+    }
 
-        // Draws the rectangle that the player can move
-        function drawRectangle() {
-            ctx.clearRect(rectangleX, rectangleY, rectangleX + 30, rectangleY + 30);
-            ctx.beginPath();
-            ctx.rect (rectangleX, rectangleY, 30, 30);
-            ctx.fillStyle = "#0095DD";
-            ctx.fill();
-            ctx.closePath();
-        }
+    // Draws the rectangle that the player can move
+    drawRectangle() {
 
-        // Draws all the elements.
-        function draw() {
-            // Updates the score
-            let value = getScore() + 1
-            updateScore(value)
+        const ctx = this.ctx
 
-            // Check if the game is not over and draws all the elements.
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            drawRectangle();
-            createBorders();
-            // Moves the Obstacles in the obstacle list.
-            for (var i = 0; i < obstacleList.length; i++){
-                moveObstacle (i);
-            }
-            
-            // Moves the rectangle left or right depending on which button is pressed.
-            if(rightPressed && rectangleX < (canvas.width - borderRectX) - 30) {
-                rectangleX += 7;
-            }
-            else if(leftPressed && rectangleX > borderRectX) {
-                rectangleX -= 7;
-            }
-            // Increments the borderMovement position.
-            borderDY += 5;        
-               
+        ctx.clearRect(this.rectangleX, this.rectangleY, this.rectangleX + 30, this.rectangleY + 30);
+        ctx.beginPath();
+        ctx.rect (this.rectangleX, this.rectangleY, 30, 30);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+    }
 
-                // Increases the difficulty by making the obstacles appear quicker
-                // if (score % 500 == 0){
-                //     intervalTime = intervalTime / 1.1;
-                //     clearInterval (myInterval);
-                // }
-            //}
-        }
-        // Handles Key Down Events
-        function keyDownHandler(e) {
-            if(e.keyCode == 39) {
-                rightPressed = true;
-            }
-            else if(e.keyCode == 37) {
-                leftPressed = true;
-            }
-        }
-        // Handles Key Up Events
-        function keyUpHandler(e) {
-            if(e.keyCode == 39) {
-                rightPressed = false;
-            }
-            else if(e.keyCode == 37) {
-                leftPressed = false;
-            }
-            
-        }
+    // Create an obstacles.
+    createObstacle() {
+        const ctx = this.ctx
 
-        // Creates the obstacles. 
-        function createObstacles (){
-            myInterval = setInterval (createObstacle, intervalTime);
-        }
-        
-        // Creates the intial obstacles.
-        createObstacles ();
-        // Creates more obstacles every 5 seconds.
-        setInterval (createObstacles, 5000)
+        console.log(this.canvas.width)
 
-        // Adds Key up and down intervals.
-        document.addEventListener("keydown", keyDownHandler, false);
-        document.addEventListener("keyup", keyUpHandler, false);
-        // Refreshes and draws the game.
-        setInterval (draw, 20);
+        var obstacleLength = 7;
+        var obstacleHeight = 7;
+        var obstacleY = 0;
+        var obstacleX = Math.floor((Math.random() * (this.canvas.width - (obstacleLength + this.borderRectX)) + 1));
+        obstacleX +=this.borderRectX;
+        ctx.beginPath();
+        ctx.rect(obstacleX, obstacleY, obstacleLength, obstacleHeight);
+        ctx.fillStyle = "#8b0000";
+        ctx.fill();
+        ctx.closePath();
+        // Addes the obstacle's cordinates to a list.
+        this.obstacleList.push([obstacleX, obstacleY]);
+    }
+
+    // Moves a specific Obstacle
+    moveObstacle (pos) {
+        const ctx = this.ctx
+
+        var obstacleLength = 7;
+        var obstacleHeight = 7;
+
+        // Gets the obstacles cordinates from the list.
+        var x = this.obstacleList [pos][0];
+        var y = this.obstacleList [pos][1];
+        y+=7;
+        ctx.beginPath();
+        ctx.rect(x, y, obstacleLength, obstacleHeight);
+        ctx.fillStyle = "#8b0000";
+        ctx.fill();
+        ctx.closePath(); 
+        // Updates the obstacles position.
+        this.obstacleList[pos] = [x,y];
+        //Checks if the user has hit the obstacle.
+        if (y >= this.rectangleY && ((x >= this.rectangleX && x + obstacleLength <= this.rectangleX + 30))){
+                window.location.reload()
+            if (this.props.username != null){
+                alert("will push to high score database")
+                //loadXMLDoc_PUSHTOHIGHSCOREDATABASE(username, score);
+            }
+                    //document.location.reload();
+                    //window.location.replace("game-over.html?username=" + username + "&score="+score);
+
+                    return;
+        }
+        // // If the obstacle has moven of screen delete it from the list.    
+        if (y > this.canvas.height + obstacleHeight){
+            this.obstacleList.splice(pos, 1);
+        }
+    }
+
+   
+      
+
+    game () {
+        setInterval (this.draw, 20);
+        setInterval ( () => setInterval(this.createObstacle, 1000 + Math.floor(Math.random() * 2000)), 3500)
+        this.createObstacle();
+    }
+
+   keyDownHandler(e) {
+        if(e.keyCode == 39) {
+            this.rightPressed = true;
+        }
+        else if(e.keyCode == 37) {
+            this.leftPressed = true;
+        }
+    }
+
+    keyUpHandler(e) {
+        if(e.keyCode == 39) {
+            this.rightPressed = false;
+        }
+        else if(e.keyCode == 37) {
+            this.leftPressed = false;
+        }
     }
 
     render (){
         return (
-            <div>
+            <div onKeyDown={this.keyDownHandler}>
                 <div className='w3-container w3-display-right' style={{width:"50%", height:"100%"}}>
                     <div className='w3-display-container w3-light-blue w3-display-left w3-margin' style={{width:"300px", height:"500px"}}>
                         <canvas  className="table" id ="myCanvas" width="300" height="500"></canvas>
