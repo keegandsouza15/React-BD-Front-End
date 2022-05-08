@@ -23,6 +23,7 @@ class App extends React.Component {
       this.setState({username: event.target[0].value})
       this.setState({gameRunning: true})
       this.setState({gameOver: false})
+      this.setState({score: 0})
       event.preventDefault();
   }
 
@@ -33,7 +34,6 @@ class App extends React.Component {
   handleGameOver() {
     this.setState({gameOver: true})
     this.setState({gameRunning: false})
-    this.setState({score: 0})
     this.setState({username: ""})
   }
 

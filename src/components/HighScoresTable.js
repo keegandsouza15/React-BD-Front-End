@@ -36,8 +36,8 @@ class HighScoreTable extends React.Component {
     render() {
         return (
             <div style={{width:"50%"}}> 
-                <div>
-                    <table>
+                <div style={{width: "50%", margin:"auto", textAlign: "center"}}>
+                    <table style={{margin:"auto"}}>
                         <tbody>
                             <tr>
                                 <th>Username</th>

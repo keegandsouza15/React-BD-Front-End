@@ -42,20 +42,24 @@ class ScoreCard extends React.Component{
 
         return (
                 <div>
-
-                    {this.props.gameRunning == true
-                        ? <h4>UserName: {username} </h4>
-                        : <form onSubmit={this.props.handleUsernameSubmit}>
-                            <label>
-                            UserName:
-                            <input type="text" value = {this.state.choosingUsername} onChange={this.handleUsernameChange}/>
-                            </label>
-                            <input type="submit" value="Start"/>
-                           </form>         
-                    }
-                      
-                    <h4>Score: {this.props.score}</h4>
-                    <h4>currentPosition: {this.state.score}</h4>
+                    <div style={{width: "50%", margin: "auto"}}>
+                        <div style={{textAlign: "center"}}>
+                            {this.props.gameRunning == true
+                                ? <h4>UserName: {username} </h4>
+                                : <form onSubmit={this.props.handleUsernameSubmit}>
+                                    <label>
+                                    UserName:
+                                    <input type="text" value = {this.state.choosingUsername} onChange={this.handleUsernameChange}/>
+                                    </label>
+                                    <input style={{fontWeight:"bold"}}type="submit" value="Start"/>
+                                </form>         
+                            }
+                            
+                            <h4>Score: {this.props.score}</h4>
+                            <h4>currentPosition: {this.state.score}</h4>
+                        </div>
+                    </div>
+                    
                 </div>
             )
     }

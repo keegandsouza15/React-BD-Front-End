@@ -269,8 +269,8 @@ class Game extends React.Component {
     render (){
         return (
                 <div onKeyDown={this.keyDownHandler} style={{width:"50%"}}>
-                    <div>
-                        <canvas id ="myCanvas" width="300" height="500"></canvas>
+                    <div style={{margin: "auto", width:"50%"}}>
+                        <canvas id ="myCanvas" width="300" height="500" style={{backgroundColor: "lavender"}}></canvas>
                     </div>
                 </div>
         )
