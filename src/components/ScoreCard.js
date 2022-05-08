@@ -41,9 +41,9 @@ class ScoreCard extends React.Component{
         const username = this.props.username;
 
         return (
-                <div className='w3-display-bottommiddle w3-container w3-lime w3-padding'style={{height:"150px", width:"400px"}} >
+                <div>
 
-                    {username !== ""
+                    {this.props.gameRunning == true
                         ? <h4>UserName: {username} </h4>
                         : <form onSubmit={this.props.handleUsernameSubmit}>
                             <label>

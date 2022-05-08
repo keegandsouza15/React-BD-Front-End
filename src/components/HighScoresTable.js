@@ -35,22 +35,20 @@ class HighScoreTable extends React.Component {
 
     render() {
         return (
-            <div className='w3-container w3-display-left' style={{width:"50%", height:"50%"}}>
-            <div className='w3-display-container w3-amber w3-display-right w3-margin' style={{width:"400px"}}>
-                
-                <table className="w3-table">
-                    <tbody>
-                        <tr>
-                            <th>Username</th>
-                            <th>Score</th>
-                        </tr>
+            <div style={{width:"50%"}}> 
+                <div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>Username</th>
+                                <th>Score</th>
+                            </tr>
+                            
+                        </tbody>
+                        <ScoreList scores={this.state.scores}/>
                         
-                    </tbody>
-                    <ScoreList scores={this.state.scores}/>
-                    
-                </table>
-            </div>
-            
+                    </table>
+                </div>
             </div>        
         )
     }

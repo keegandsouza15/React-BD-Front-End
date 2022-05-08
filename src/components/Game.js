@@ -1,6 +1,5 @@
 
 import React from "react";
-import ScoreCard from "./ScoreCard"
 
 
 
@@ -269,18 +268,11 @@ class Game extends React.Component {
 
     render (){
         return (
-            <div onKeyDown={this.keyDownHandler}>
-                <div className='w3-container w3-display-right' style={{width:"50%", height:"100%"}}>
-                    <div className='w3-display-container w3-light-blue w3-display-left w3-margin' style={{width:"300px", height:"500px"}}>
-                        <canvas  className="table" id ="myCanvas" width="300" height="500"></canvas>
+                <div onKeyDown={this.keyDownHandler} style={{width:"50%"}}>
+                    <div>
+                        <canvas id ="myCanvas" width="300" height="500"></canvas>
                     </div>
                 </div>
-                <ScoreCard 
-                    score={this.props.score}
-                    username={this.props.username} 
-                    handleUsernameSubmit={this.props.handleUsernameSubmit}
-                />
-            </div>
         )
     
 }}

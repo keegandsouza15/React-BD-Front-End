@@ -3,6 +3,9 @@ import React from "react";
 import Header from "./components/Header"
 import Game from "./components/Game"
 import HighScoresTable from "./components/HighScoresTable"
+import ScoreCard from "./components/ScoreCard"
+import GameOver from "./components/GameOver";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -13,13 +16,13 @@ class App extends React.Component {
     this.handleUsernameSubmit = this.handleUsernameSubmit.bind(this)
     this.updateScore = this.updateScore.bind(this)
     this.handleGameOver = this.handleGameOver.bind(this)
-    this.retry = this.retry.bind(this)
   
   }
 
   handleUsernameSubmit(event) {
       this.setState({username: event.target[0].value})
       this.setState({gameRunning: true})
+      this.setState({gameOver: false})
       event.preventDefault();
   }
 
@@ -29,39 +32,35 @@ class App extends React.Component {
 
   handleGameOver() {
     this.setState({gameOver: true})
-  }
-
-  retry() {
-    console.log('retry')
+    this.setState({gameRunning: false})
     this.setState({score: 0})
     this.setState({username: ""})
-    this.setState({gameOver: false})
-    this.setState({gameRunning: false})
   }
 
- 
   render() {
     return (
-      <div className="w3-container">
+      <div>
         
         <Header/>
-        {this.state.gameOver == true &&
-          <div className="w3-red w3-padding">
-            <h1 >GameOver</h1>
-            <button className="w3-red w3-padding" onClick={this.retry}>Retry</button>
-          </div>
       
+        <div style={{display:"flex"}}>
+          <HighScoresTable/>
+          <Game username={this.state.username}
+                score={this.state.score}
+                gameRunning={this.state.gameRunning}
+                gameOver={this.state.gameOver}
+                handleUsernameSubmit={this.handleUsernameSubmit}
+                updateScore={this.updateScore}
+                handleGameOver={this.handleGameOver}/>
+        </div>
+        {this.state.gameOver == true &&
+          <GameOver/>
         }
-        
-        <HighScoresTable/>
-        <Game username={this.state.username}
-              score={this.state.score}
-              gameRunning={this.state.gameRunning}
-              gameOver={this.state.gameOver}
-              handleUsernameSubmit={this.handleUsernameSubmit}
-              updateScore={this.updateScore}
-              handleGameOver={this.handleGameOver}/>
-              
+        <ScoreCard 
+          score={this.state.score}
+          username={this.state.username}
+          gameRunning={this.state.gameRunning}
+          handleUsernameSubmit={this.handleUsernameSubmit}/>    
       </div>
     )
   }

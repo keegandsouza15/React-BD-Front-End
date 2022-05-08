@@ -1,8 +1,8 @@
 const Header = () => {
 
     return (
-        <header className='w3-display-container w3-display-topmiddle'>
-            <h1 className="w3-xxxlarge">Block Dodger</h1>
+        <header style={{width:"100%"}}>
+            <h1 style={{textAlign : "center"}}>Block Dodger</h1>
         </header>
     )
 }
